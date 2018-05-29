@@ -1,0 +1,55 @@
+<!-- CSS media query within a stylesheet -->
+<style>
+@media print {
+  @page { margin: 0; }
+  #printPageButton {
+    display: none;
+  }
+  a[href] {
+    display: none;
+  }
+ 
+}
+</style>
+
+<div class="row">
+
+<p id="notice"><%= notice %></p>
+<h4>Notas SNNA</h4>
+ 	<table>
+  		<thead>
+		<tr>
+		  <th> Matrícula</th>
+		  	<th> NGA1 </th>
+			<th> NGA2</th>
+			<th> NPA</th>
+			<th> NX1</th>
+			<th> NX2</th>
+			<th> Promedio</th>
+			<th> Mejoramiento</th>
+			<th> Asistencia</th>
+			<th> Notafinal</th>
+		 
+		</tr>
+	  </thead>
+	 
+	  <tbody>
+		<% @results.each do |book| %>
+		  <tr>
+		    <td><%= book['iddetallematricula'] %></td>
+		    <td><%= book['NGA1'] %></td>
+		    <td><%= book['NGA2'] %></td>
+			<td><%= book['NPA'] %></td>
+			<td><%= book['NX1'] %></td>
+			<td><%= book['NX2'] %></td>
+		    <td><%= book['suma'] %></td>
+			<td><%= book['NM'] %></td>
+			<td><%= book['NAT'] %></td>
+			<td><%= book['notafinal'] %></td>
+		  </tr>
+		<% end %>
+	  </tbody>
+	</table>
+<br />
+
+</div>

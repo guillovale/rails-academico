@@ -1,0 +1,19 @@
+<% provide(:title, @usuario.ApellInfPer + @usuario.ApellMatInfPer) %>
+<% provide(:button_text, 'Guardar cambios') %>
+<div class="row">
+
+	<div class="col-md-2">
+		<%= render 'shared/menu1' %>
+	</div>
+	
+
+
+	<div class="col-md-8">
+		
+		<fieldset>
+			<h2><legend>Cambiar password</legend></h2>
+			<%= render 'formreset' %>
+		</fieldset>
+	
+	</div>
+</div>

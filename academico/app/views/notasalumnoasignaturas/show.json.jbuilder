@@ -1,0 +1,1 @@
+json.partial! "notasalumnoasignaturas/notasalumnoasignatura", notasalumnoasignatura: @notasalumnoasignatura

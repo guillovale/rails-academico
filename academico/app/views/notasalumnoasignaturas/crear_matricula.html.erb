@@ -1,0 +1,108 @@
+<!-- CSS media query within a stylesheet -->
+<style>
+@media print {
+  #printPageButton {
+    display: none;
+  }
+  #printPageButton1 {
+    display: none;
+  }
+}
+</style>
+
+<button id="printPageButton">Home</button>
+<button id="printPageButton1" onClick="window.print();">Print</button>
+
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Fecha:</strong>
+ 	<%=  @factura.fecha %>
+</p>
+
+<p>
+  <strong>Ciinfper:</strong>
+	<%= @usuario.CIInfPer %> 
+</p>
+
+<p>
+  <strong>Factura:</strong>
+ 	<%=  @factura.id %>
+</p>
+
+<p>
+  <strong>Idper:</strong>
+ 	<%= @periodo.idper %>
+</p>
+
+
+<div class="row">
+		<%#= @usuario = params[:CIInfPer] %>
+	<% if @malla_mostrar.nil?%>
+		<% notice = "No tiene malla asignada !!" %>
+	<% end %>
+	<% notice = @asig_matriculadas %>
+
+	
+
+            <h3>Matrícula </h3>
+		
+            <div class="list-group">
+		
+
+		<table  class=" table table-bordered table-condensed">
+			<thead>
+				<tr>
+					<th>Nivel</th>
+					<th>Carrera</th>
+					<th>Código</th>
+					<th>Asignatura</th>
+					<th>Curso</th>
+					<th>Créd.</th>
+					<th>Costo_asig.</th>
+	
+				</tr>
+		  </thead>
+
+		  <tbody>
+			<% if !@asig_matriculadas.nil?%>
+				<% sumacreditos = 0 %>
+				<% sumapagar = 0 %>
+				<% @asig_matriculadas.each do |asignatura| %>
+					
+					<tr>
+						<td><%= asignatura[1]['nivel'] %></td>
+						<td><%= asignatura[1]['carrera'] %></td>
+						<td><%= asignatura[0] %></td>
+						<td><%= asignatura[1]['nombre'] %></td>
+						<td><%= asignatura[1]['paralelo'] %></td>
+						<td><%= asignatura[1]['credito'] %></td>
+						<td><%= (asignatura[1]['costo'].to_f*asignatura[1]['credito'].to_i*
+							asignatura[1]['vrepite'].to_i).round(2) %></td>
+					</tr>
+					<% sumacreditos = sumacreditos + asignatura[1]['credito'].to_i %>
+					<% sumapagar = sumapagar + asignatura[1]['costo'].to_f*asignatura[1]['credito'].to_i*
+							asignatura[1]['vrepite'].to_i %>
+				<% end %>
+				<tr>
+					<th></th>
+					<th></th>
+					<th></th>
+					<th>Total</th>
+					<th></th>
+					<th><%= sumacreditos %></th>
+					<th><%= "$ #{sumapagar.round(2)}" %></th>
+					<th></th>
+		
+				</tr>		
+				
+			<% end %>
+		  </tbody>
+		</table>
+		
+            </div>
+</br>
+<p id="notice"><%= notice %></p>		
+
+		
+</div><!--/.well -->

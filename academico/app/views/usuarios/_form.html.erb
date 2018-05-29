@@ -1,0 +1,86 @@
+<%= form_for (@usuario), :html => {:class => "form-horizontal center"} do |f| %>
+	<%= render 'shared/error_messages', object: @usuario %>
+		
+	<%= f.file_field :fotografia %>
+		
+	
+	<div class="form-group">
+		<%= f.label :GeneroPer, "Sexo del estudiante:", class: "col-md-4 control-label" %>
+		<div class="col-md-2">
+			<%= f.collection_select :GeneroPer, Sexo.order(:sx_nombre), :sx_id, :sx_nombre,
+				include_blank: true, class: "form-control" %>
+		</div>
+	</div>
+
+
+	<div class="form-group">
+		<%= f.label :EtniaPer, "Etnia del estudiante:", class: "col-md-4 control-label" %>
+		<div class="col-md-2">
+			<%= f.collection_select :EtniaPer, Etnia.order(:tet_nombre), :tet_id, 
+				:tet_nombre, include_blank: true, class: "form-control" %>
+		</div>
+	</div>
+
+	<div class="form-group">
+		<%= f.label :FechNacimPer, "Fecha de nacimiento:", 
+			class: "col-md-4 control-label" %>
+		<div class="col-md-6">
+			<%= f.date_select :FechNacimPer, :start_year => 1940, class: 'form-control'%>
+		</div>
+	</div>
+
+
+	<div class="form-group">
+		<%= f.label :CiudadPer, "Ciudad:", 
+			class: "col-md-4 control-label" %>
+		<div class="col-md-6">
+			<%= f.text_field :CiudadPer, class: 'form-control'%>
+		</div>
+	</div>
+	
+	<div class="form-group">
+		<%= f.label :DirecDomicilioPer, "Dirección:", 
+			class: "col-md-4 control-label" %>
+		<div class="col-md-6">
+			<%= f.text_field :DirecDomicilioPer, class: 'form-control'%>
+		</div>
+	</div>
+
+	<div class="form-group">
+		<%= f.label :Telf1InfPer, "Teléfono:", 
+			class: "col-md-4 control-label" %>
+		<div class="col-md-6">
+			<%= f.text_field :Telf1InfPer, class: 'form-control'%>
+		</div>
+	</div>
+
+	<div class="form-group">
+		<%= f.label :CelularInfPer, "Celular:", 
+			class: "col-md-4 control-label" %>
+		<div class="col-md-6">
+			<%= f.text_field :CelularInfPer, class: 'form-control'%>
+		</div>
+	</div>
+
+	<div class="form-group">
+		<%= f.label :mailPer, "email:", 
+			class: "col-md-4 control-label" %>
+		<div class="col-md-6">
+			<%= f.email_field :mailPer, class: 'form-control'%>
+		</div>
+	</div>
+
+	<div class="form-group">
+		<div class="col-md-4">
+		</div>
+		<div class="col-md-4">
+			<%= f.submit yield(:button_text), class: "btn btn-primary"%>
+		</div>
+		<div class="col-md-2">
+			<%= f.submit 'Cancelar', class: "btn btn-warning"%>
+		</div>
+	</div>
+
+
+<% end %>
+

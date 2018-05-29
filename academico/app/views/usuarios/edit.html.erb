@@ -1,0 +1,20 @@
+<% provide(:title, @usuario.ApellInfPer + @usuario.ApellMatInfPer) %>
+<% provide(:button_text, 'Guardar cambios') %>
+<div class="row">
+
+	<div class="col-md-4">
+		
+			<%#= gravatar_for @usuario %>
+			
+			</br></br>
+			<%= image_tag url_for(:controller => "usuarios", :action => "show_image", :id => @usuario.CIInfPer), size: "192x192" %>
+			<h6><%= @usuario.ApellInfPer + ' ' + @usuario.ApellMatInfPer + ' ' + @usuario.NombInfPer%></h6>
+			</div>
+			</br></br></br></br></br>
+			<div class="col-md-8">
+			<h2><legend>Datos Personales</legend></h2>
+			<%= render 'form' %>
+			</div>
+	
+	
+</div>

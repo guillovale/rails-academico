@@ -1,0 +1,46 @@
+<% @usuario ||= current_user %>
+<header>
+  <div class="container">
+    <nav class="navbar navbar-fixed-top navbar-light" style="background-color: #0489B1; font-size: 14px; font-weight: bold; color:white">
+		<%= link_to "UTELVT",   root_path, style: 'color:white; font-size: 14px' %>
+      <ul class="list-inline">
+        <% if logged_in? %>
+		<li class="nav-item"><%= link_to "INICIO", ver_horario_path(@usuario), style: 'color:white; font-size: 14px' %></li>
+		<li class="nav-item"><%= link_to "EDITAR DATOS", edit_usuario_path(@usuario) , class: "feed_link" , style: 'color:white; font-size: 14px'%></li> 
+		<% @periodo = Periodolectivo.where("StatusPerLec = ?", 1).first() %>
+			<% periodo_matricula = Control_periodo_matricula.where('cmp_status = ?', 1).first() %>
+			<% hoy = Time.now.strftime("%Y/%m/%d") %>
+			<% @periodo?(idperiodo = @periodo.idper):(idperiodo = 0) %> 
+			<% extension_mat = Extension_matricula.where("idper = ? and cedula = ? 
+					and ? >= fechain and ? <= fechafin", 
+							idperiodo,@usuario, hoy, hoy)%>
+
+			<% if (periodo_matricula && @usuario.valid? && idperiodo > 0) or (extension_mat.exists? && @usuario.valid?) %>
+				<li class="nav-item"><%= link_to "MATRÍCULA", ver_malla_path(@usuario), class: "feed_link" , style: 'color:white; font-size: 14px'%></li>
+			<% else %>
+				<li list-group-item active><%= label_tag "MATRÍCULA" %></li>
+			<% end %>
+		<li class="nav-item"><%= link_to "NOTAS", ver_notas_matricula_path(@usuario), class: "feed_link" , style: 'color:white; font-size: 14px'%></li>
+		<li class="nav-item"><%= link_to "HISTÓRICO NOTAS", ver_notas_path(@usuario), class: "feed_link" , style: 'color:white; font-size: 14px'%></li>
+        <li><% link_to "AYUDA", '#' , style: 'color:white; font-size: 14px' %></li>
+		
+
+	
+
+      </ul>
+		
+		
+		
+		
+			
+		<%= link_to "Cerrar sesión", logout_path, method: "delete" , style: 'color:yellow'%>
+			
+				<%= image_tag url_for(:controller => "usuarios", :action => "show_image", :id => @usuario.CIInfPer), size: "80" %>
+			
+	<% else %>
+		<%= link_to "Iniciar sesión", login_path, style: 'color:white;font-size: 14px' %>
+        <% end %>
+		
+    </nav>
+  </div>
+</header>

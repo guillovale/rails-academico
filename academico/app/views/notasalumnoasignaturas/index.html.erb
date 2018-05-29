@@ -1,0 +1,213 @@
+<script>
+
+// $('#calendar').fullCalendar();
+
+
+$(function(){
+
+
+	$('#table-data tbody').on('click', 'tr', function(e) {
+        var $row = $(this).closest('tr');
+
+        //var data = table.row($row).data();
+        //var key = data[1];
+
+	if(this.checked){
+            //$row.addClass('selected');
+            //rows_selected[key] = data;
+		alert($row[1]);
+        } else {
+            //$row.removeClass('selected');
+            //delete rows_selected[key];
+		alert($row[0]);
+        }
+
+        e.stopPropagation();
+	
+	//alert($row);
+
+        
+    });
+
+    $('#paralelo').on('change', function(){
+	var selected = $('#paralelo :selected').text();
+	var datos = $('#dato').val();
+	var opts = '<%= @carreras.to_json.html_safe %>';
+	//my_objects = JSON.parse('<%=raw @carreras.to_json %>');
+
+	var response = '[{"result":"true","count":12}, {"result":"false","count":22}]';
+	//var JsonObject= JSON.parse(response);
+
+	var part1name = "'" + opts + "'"
+	//var part2name = part1name.replace("]","'");
+
+	//var response = part2name;
+	var JsonObject= JSON.parse(opts);
+
+	//var state = JSON.parse('part1name.to_json.html_safe');
+	//var opts1 = part1name.[A];
+	//var opts1 = jQuery.parseJSON('part1name');
+	//var opts =  jQuery.parseJSON(<%= @carreras.to_json %>;)
+
+	//var array_keys = new Array();
+	//var array_keys = datos[selected];
+	//var e = document.getElementById("paralelo");
+	// var strUser = e.options[e.selectedIndex].cupo;
+	//var strUser = document.querySelector("#paralelo option")
+	// var selectedText = strUser.options[strUser.selectedIndex]
+
+	var selects = document.querySelector("#paralelo option");
+	//var selectedText = selects.options[selects.selectedIndex].text;
+
+	var optgroup = "optgroup[label='"+ selected + "']";
+	//var parkOptions = $(datos).filter(selected).html();
+        //alert(JsonObject[1].cupo);
+	alert(selected);
+	console.log("Your select value is " + $(this).horario);
+    });
+});
+
+ jQuery(function() {
+  var states;
+  states = $('#carrera').html();
+  //alert($(this).val());
+  
+
+
+});
+
+</script>
+<br>
+<br>
+<div class="row">
+	
+	<div class="col-md-6" style="font-size:12px;">
+		<% carrera_habilitada = 0 %>
+		<h4>Carrera: <%= if @carrera then @carrera.NombCarr else "" end %> Malla: <%= @anio %>  
+			<% @notas_reprobadas %>  <% @num_matricula_permitido %></h4>
+		<%= render partial: 'search' %>
+		</br>
+		<% if @carrera %>
+			<% carrera_habilitada = @carrera.habilitada %>
+				<% if	@carrera.habilitada == 0 %>
+					<% if !@extension_mat	%>		
+						<% flash[:alert] = 'Carrera no habilitada !!!' %>
+					<% end %>
+				<% end %>	
+		<% end %>		
+		
+		<table  class=" table table-striped table-condensed">
+		  <thead>
+		    <tr>
+			<th></th>
+			<th>Nivel</th>
+			<th>Código</th>
+			<th>Asignatura</th>
+			<th>Créd.</th>
+			<th>Repite</th>
+			<th>Paralelo</th>
+		    </tr>
+		  </thead>
+
+		  <tbody>
+			
+			<%= form_tag(:controller => "notasalumnoasignaturas", :action => "agrega_asignatura") do %>
+			<% if !@malla_mostrar.nil?%>
+				<% cont = 0 %>
+				<% asig_pos = {} %>
+				<% @malla_mostrar.each do |malla| %>
+					
+					<tr>	
+
+						<% if (malla[1]['aprobada'] == 'a' || 
+							malla[1]['aprobada'] == 'p') %>
+							<td></td>
+						<% else %>
+							
+							
+								<td style="font-size:12px;">
+								<% if (malla[1]['curso'].any?) %>
+									<% cont += 1 %>
+									<% asig_pos = {malla[0]=>{'contador'=> cont, 
+									'nivel'=> malla[1]['nivel'], 
+									'asignatura' => malla[1]['asignatura'],
+									'credito'=> malla[1]['credito'], 
+									'vrepite' => malla[1]['vrepite'],
+									'costo'=> malla[1]['costo']
+
+							}} %>
+									<%=	check_box_tag 'idasignatura[]', asig_pos  %>
+								<% end %>
+								</td>
+						<% end %>
+						
+						<td style="font-size:12px;"><%= malla[1]['nivel'] %></td>
+						<td style="font-size:12px;"><%= malla[0] %></td>
+						<td style="font-size:10px;"><%= malla[1]['asignatura'] %></td>
+						<td style="font-size:12px;"><%= malla[1]['credito'] %></td>
+						<td style="font-size:12px;"><%= malla[1]['vrepite'] %></td>
+						<% if (malla[1]['aprobada'] == 'a' || 
+							malla[1]['aprobada'] == 'p') %>
+							<td style="font-size:12px;">
+								<% if (malla[1]['aprobada'] == 'a') %>
+									<span style="color:blue">
+									<i class="glyphicon glyphicon-ok"></i> aprobada</span>
+								<% elsif (malla[1]['aprobada'] == 'm') %>
+									<span style="color:orange">
+									<i class="glyphicon glyphicon-warning-sign"></i> matriculada</span>
+								<% elsif (malla[1]['aprobada'] == 'p') %>
+									<span style="color:red">
+									<i class="glyphicon glyphicon-remove"></i> 
+										pre requisito (<%=malla[1]['prerequisito'] %>)</span>
+								<% end %>
+							</td>
+					
+						<% else %>
+							<% if (malla[1]['aprobada'] == 'n' || malla[1]['aprobada'] == 'm') %>
+								<% paralelocupo = malla[1]['curso'] %>
+								<% categories_array = paralelocupo.map {|key, value| 
+									[('"' + value['paralelo'] + '"' + ' cupos:' + 
+								value['cupo'].to_s ), key] } %> 
+								<%# + ' idcurso:' + value['idcurso'].to_s%>
+								
+								<td style="font-size:12px;">
+									<% if (malla[1]['curso'].any?) %>
+										<%= select_tag 'curso[]', 
+											options_for_select(categories_array) %>
+									<% else %>
+										Sin cupo !!
+									<% end %>
+								</td>
+							<% else %>
+								<td style="font-size:12px;">---</td>
+						
+							<% end %>
+						<% end %>
+						<td><%= hidden_field_tag 'idasig', malla[0] %></td>
+						<td><%= hidden_field_tag 'idcarr', malla[1]['idcarr'] %></td>
+					</tr>
+					
+				<% end %>
+		
+		
+			<% end %>
+		  </tbody>
+		</table>
+
+			<% if (!@malla_mostrar.blank? && carrera_habilitada == 1) or (!@malla_mostrar.blank? && @get_extension) %>
+				<%= submit_tag "Agregar Asignaturas >>", class: "btn btn-info btn-sm" %>
+			<% end %>
+		<% end %>
+		<% if flash[:alert] %>
+			<div class="alert alert-info"><%= flash[:alert] %></div>
+		<% end %>
+	</br> 
+	</div><!--/span-->
+	
+	<div class="col-md-6" >
+
+		<%= render :partial => 'shared/menu2' %>
+
+	</div><!--/.well -->
+	
+ </div><!--/row-->

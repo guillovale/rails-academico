@@ -1,0 +1,113 @@
+<div class="sidebar-nav" >
+		<%#= @usuario = params[:CIInfPer] %>
+	
+	<%# notice = @asig_matriculadas %>
+
+        	<div>
+				<% @periodo?(periodo = @periodo.DescPerLec):(periodo = '') %> 
+				<h4>Matrícula período: <%= periodo %></h4> 
+				<% if @idfactura %>
+					<%= link_to " Imprimir matrícula", ver_matricula_path(CIInfPer:@usuario, factura:@idfactura), 
+						class: "glyphicon glyphicon-print" , style: 'color:blue'%>
+				<% end %>
+		</div>
+		
+            <div class="list-group">
+		
+		<table  class=" table table table-striped table-condensed" style="font-size:12px;">
+			<thead>
+				<tr>
+					<th>Curso</th>
+					<th>Nivel</th>
+					<th>Carrera</th>
+					<th>Código</th>
+					<th>Asignatura</th>
+					<th>Curso</th>
+					<th>Créd.</th>
+					<th>Costo</th>
+	
+				</tr>
+		  </thead>
+
+		  <tbody>
+			<% sumacreditos = 0 %>
+			<% sumapagar = 0 %>
+			<% matriculadas = 0 %>
+			
+			<% if !@detalle_matriculas.nil?%>
+				<% @detalle_matriculas.each do |detalle| %>
+					<tr>
+						<td style="font-size:12px;"><%= detalle.idcurso %></td>
+						<td style="font-size:12px;"><%= detalle.nivel %></td>
+						<td style="font-size:12px;"><%= detalle.idcarr %></td>
+						<td style="font-size:12px;"><%= detalle.idasig %></td>
+						<td style="font-size:10px;"><%= detalle.asignatura.NombAsig %></td>
+						<td style="font-size:12px;"><%= detalle.paralelo %></td>
+						<td style="font-size:12px;"><%= detalle.credito %></td>
+						<td style="font-size:12px;"><%= (detalle.costo.to_f*detalle.credito.to_i).round(2) %></td>
+						<td style="font-size:12px;"><span style="color:orange">
+							<i class="glyphicon glyphicon-warning-sign"></i></span></td>
+					</tr>
+					<% sumacreditos = sumacreditos + detalle.credito.to_i %>
+					<% sumapagar = sumapagar + detalle.costo.to_f*detalle.credito.to_i %>
+				<% end %>
+			<% end %>
+
+			<% if !@asig_matriculadas.nil?%>
+				
+				<% @asig_matriculadas.each do |asignatura| %>
+				<% nombre_asig = Asignatura.where("idAsig = ?", asignatura[0]).first() %>
+				<% curso = Cursoofertado.where("id = ?", asignatura[1]['idcurso']).first() %>	
+					<tr>
+						<td style="font-size:12px;"><%= asignatura[1]['idcurso'] %></td>
+						<td style="font-size:12px;"><%= (curso)?(curso.detallemalla.nivel):('') %></td>
+						<td style="font-size:12px;"><%= (curso)?(curso.detallemalla.mallacarrera.idcarrera):('') %></td>
+						<td style="font-size:12px;"><%= asignatura[0] %></td>
+						<td style="font-size:10px;"><%= nombre_asig.NombAsig %></td>
+						<td style="font-size:12px;"><%= (curso)?(curso.paralelo):('') %></td>
+						<td v><%= asignatura[1]['credito'] %></td>
+						<td style="font-size:12px;">
+							<%= (asignatura[1]['costo'].to_f*asignatura[1]['credito'].to_i).round(2) %></td>
+						
+						<td style="font-size:12px;"><span style="color:red">
+							<%= link_to "X", quitar_asignatura_path(id: asignatura[0]),	
+							:method => :delete, class: "btn btn-warning btn-xs"%></td>
+							<% matriculadas = matriculadas + 1 %>
+						
+					</tr>
+					<% sumacreditos = sumacreditos + asignatura[1]['credito'].to_i %>
+					<% sumapagar = sumapagar + asignatura[1]['costo'].to_f*asignatura[1]['credito'].to_i %>
+				<% end %>
+				<tr>
+					<th></th>
+					<th></th>
+					<th></th>					
+					<th>Total</th>
+					<th></th>
+					<th><%= sumacreditos %></th>
+					<th><%= "$ #{sumapagar.round(2)}" %></th>
+					<th></th>
+		
+				</tr>		
+				
+			<% end %>
+		  </tbody>
+		</table>
+		
+			<div class="col-sm-offset-1 col-sm-10">
+				<% if !@asig_matriculadas.blank? && (@num_credito_permitido >= sumacreditos) && matriculadas > 0%>
+					<%= link_to "Crear Matrícula", crear_matricula_path(CIInfPer:@usuario), 
+						class: "btn btn-warning btn-xm" %>
+				<% end %>
+			</div>
+		
+		<% if sumacreditos.to_i > @num_credito_permitido.to_i %>
+			<% notice = "El número de créditos sobrepasa el límite permitido !!" %>
+		<% end %>
+
+            </div>
+</br>
+<p id="notice"><%= notice %></p>		
+		
+</div><!--/.well -->
+

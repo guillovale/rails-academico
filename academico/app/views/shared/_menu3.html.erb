@@ -1,0 +1,31 @@
+<div class="sidebar-nav" >
+		<%#= @usuario = params[:CIInfPer] %>
+	
+	<%# notice = @facturas_anteriores.first() %>
+
+        	<div>
+				<% @periodo?(periodo = @periodo.DescPerLec):(periodo = '') %> 
+				<h5>Matrícula período: <%= periodo %></h5> 
+				<% if @factura %>
+					<%= link_to " Imprimir " + @factura.tipo_documento, ver_matricula_path(CIInfPer:@usuario, factura:@factura.id), 
+						class: "glyphicon glyphicon-print" , style: 'color:blue'%>
+				<% end %>
+		</div>
+		
+            <div class="list-group">
+				<p>Documentos períodos anteriores:</p> 
+				<% if @facturas_anteriores %>
+					<% @facturas_anteriores.each do |factura| %>
+						<%= link_to ' ' + factura.tipo_documento + ': ' + factura.periodolectivo.DescPerLec, 
+							ver_matricula_path(CIInfPer:@usuario, factura:factura.id), 
+							class: "glyphicon glyphicon-print" , style: 'color:grey'%>
+					<% end %>
+				<% end %>
+		
+
+            </div>
+</br>
+<p id="notice"><%= notice %></p>		
+		
+</div><!--/.well -->
+

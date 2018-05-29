@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= yield(:title) %> | Utelvt</title>
+    <%= csrf_meta_tags %>
+
+    <%= stylesheet_link_tag    'application', media: 'all', 'data-turbolinks-track': 'reload' %>
+    <%= javascript_include_tag 'application', 'data-turbolinks-track': 'reload' %>
+
+
+	<!-- Bootstrap Core CSS -->
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+     <link href="css/simple-sidebar.css" rel="stylesheet">
+	
+
+  </head>
+
+  <body>
+    <%= render 'layouts/header' %>
+    <div class="container">
+	<% flash.each do |message_type, message| %>
+		<%#= content_tag(:div, message, class: "alert alert-#{message_type}") %>
+	<% end %>
+	<% flash.clear %>
+	<%= yield %>
+	<%#= render 'layouts/footer' %>
+	<% debug(params) %>
+    </div>
+	<%#= render 'layouts/footer' %>
+  </body>
+  </body>
+</html>

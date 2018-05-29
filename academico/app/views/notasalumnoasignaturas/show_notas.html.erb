@@ -1,0 +1,170 @@
+<!-- CSS media query within a stylesheet -->
+<style>
+@media print {
+  
+	.noprint{
+       display:none;
+   }
+ 
+}
+</style>
+
+<div class="row">
+	<div class="col-xs-12">
+		<% if flash[:alert] %>
+			<div class="alert alert-info"><%= flash[:alert] %></div>
+	  	<% end %>
+		<%= image_tag('encabezado.png')  %>
+		<div class="noprint">
+			<div style="display:inline-block;">
+				
+				<%#= link_to 'Regresar', @usuario, :class => "btn btn-warning" %>
+				<button id="printPageButton", onclick="window.print()">
+				<span class="glyphicon glyphicon-print"></span> Imprimir</button>
+			</div>	
+		</div>
+		
+
+		<address>
+			<br>
+			<strong>Cédula No:</strong>
+				<% if @usuario %>
+					<strong><%=  @usuario.CIInfPer %> </strong></br>
+					<strong><%= nombre = @usuario.ApellInfPer + ' ' + @usuario.ApellMatInfPer + ' ' + 
+						@usuario.NombInfPer %></strong>
+					<% cedula = @usuario.CIInfPer %>
+				<% end %>
+			</br>
+			
+			
+		</address>
+		<h5>Reporte de notas</h5>
+		
+					
+					<table  class=" table-sm table table-bordered table-condensed ">
+						
+						<thead>
+							<tr>
+								<th>Matrícula</th>
+								<th>Nivel</th>
+								<th>Carrera</th>
+								<th>Período</th>
+								<th>Código</th>
+								<th>Asignatura</th>
+								<th>Asistencia</th>
+								<th>Nota</th>
+								<th>Período</th>
+								<% if !@nivelacion.nil? %>
+									<% if @nivelacion[0]['cedula'].nil? %>
+											<th>Estado</th>
+									<% end %>
+								<% end %>
+							</tr>
+					  </thead>
+
+					  <tbody>
+
+						<% sumacreditos = 0 %>
+						<% sumapagar = 0 %>
+						<% matriculadas = 0 %>
+						<% idper = (@periodo)?(@periodo.idper):0 %>
+									
+						<% if !@notasalumnoasignatura.nil?%>
+							<% notas = @notasalumnoasignatura.sort_by{|e| e[:idper] unless e[:iddetalle] != nil } %>
+							<% notas.each do |nota| %>
+								
+								<tr>
+									<% if !nota.detallematricula.nil?%>
+										<td style = "font-size: 11px; ">
+											<%= nota.detallematricula.id %></td>
+										<td style = "font-size: 11px; ">
+											<%= nota.detallematricula.nivel %></td>
+										<td style = "font-size: 11px; "><%= nota.detallematricula.idcarr unless 
+											 nota.detallematricula.nil? %></td>
+										<td style = "font-size: 11px; "><%= nota.detallematricula.factura.idper unless 
+											 nota.detallematricula.nil? %></td>
+									<% else %>
+										<td style = "font-size: 11px; ">
+											<%= nota.matricula.idMatricula unless nota.matricula.nil? %></td>
+										<td style = "font-size: 11px; ">
+											<%= nota.matricula.idsemestre unless nota.matricula.nil? %></td>
+										<td style = "font-size: 11px; "><%= nota.matricula.idCarr unless 
+											 nota.matricula.nil? %></td>
+										<td style = "font-size: 11px; "><%= nota.matricula.idPer unless 
+											 nota.matricula.nil? %></td>
+				
+									<% end %>
+									
+									<td style = "font-size: 11px; "><%= nota.idAsig %></td>
+									<td style = "font-size: 11px; "><%= nota.asignatura.NombAsig %></td>
+									<td style = "font-size: 11px; "><%= nota.asistencia %>%</td>
+									<td style = "font-size: 11px; "><%= nota.CalifFinal %></td>
+									<td style = "font-size: 11px; "><%= nota.periodolectivo.DescPerLec unless 
+										 nota.periodolectivo.nil? %></td>
+									<% if !@nivelacion.nil? %>
+										<% if @nivelacion[0]['cedula'].nil? %>
+											<% if (nota.aprobada == true) %>
+												<td style = "font-size: 11px; color: blue"><%= 'Aprobada' %></td>
+											<% elsif (nota.aprobada == false && nota.StatusCalif == 1 && idper)%>
+												<td style = "font-size: 11px; color: orange"><%= 'Pendiente' %></td>
+											<% else %>
+												<td style = "font-size: 11px; color: red"><%= 'Reprobada' %></td>
+											<% end %>
+										<% end %>
+									<% end %>
+									
+								</tr>
+								<% sumacreditos = sumacreditos %>
+								<% sumapagar = sumapagar  %>
+							<% end %>
+							
+							<tr>
+								<th></th>
+								<th></th>
+								<th></th>
+								<th></th>
+								<th></th>
+								<th><%#= sumacreditos %></th>
+								<th><%#= "$ #{sumapagar.round(2)}" %></th>
+								<th></th>
+					
+							</tr>
+
+						<% end %>
+
+
+						
+					  </tbody>
+					</table>
+					<%# if @nivelacion.nil? %>
+						<font size="1" >
+							<%= @carreras %>
+						</font>
+					<%# end %>
+					<% if !@nivelacion.nil? %>
+						<% if !@nivelacion[0]['cedula'].nil? %>
+						
+						<address style = "font-size: 12px; font-weight: bold; color:black">
+							Período:	<%= @nivelacion[0]['periodo'] %> <br>
+							Carrera:	<%= @nivelacion[0]['carrera'] %> <br>
+							Tipo:	<%= @nivelacion[0]['tipo_ingreso'] %> <br>
+							Promedio Total:	<%= @nivelacion[0]['sumaNota'] %> <br>
+							Promedio Asistencia:	<%= @nivelacion[0]['sumaAsistencia'] %>% <br><br>
+							NIVELACIÓN:	<%= @nivelacion[0]['Estado'] %>
+						
+						</address>
+						
+						<% end %>	
+						
+					<% end %>
+	</div>
+</div><!--/.well -->
+
+<footer>
+	<br><br><br><br>
+	<address style="font-size:80%;">
+		Estudiante:________________________  
+		Director:  ________________________
+	</address>
+</footer>
+

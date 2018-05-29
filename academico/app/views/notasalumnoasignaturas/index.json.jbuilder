@@ -1,0 +1,1 @@
+json.array! @notasalumnoasignaturas, partial: 'notasalumnoasignaturas/notasalumnoasignatura', as: :notasalumnoasignatura

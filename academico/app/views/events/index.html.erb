@@ -1,0 +1,48 @@
+<p id="notice"><%= notice %></p>
+<div class="row">
+	
+	<div id="mostrar" class="col-xs-8">
+
+		<h1>Horario</h1>
+
+		<table class=" table table-sm table-bordered table-condensed table-hover" style="font-size: 11px" >
+		  <thead>
+			<tr>
+				<th>hora_inicio</th>
+				<th>hora_fin</th>
+				<th>Lunes</th>
+				<th>Martes</th>
+				<th>Miercoles</th>
+				<th>Jueves</th>
+				<th>Viernes</th>
+				<th>Sábado</th>
+			</tr>
+		  </thead>
+
+		  <tbody>
+			<% if @events %>
+			<% @events.each do |event| %>
+			  <tr>
+				<td style="font-size: 10px"><%= event["hora_inicio"].strftime "%H:%M:" %></td>
+				<td style="font-size: 10px"><%= event["hora_fin"].strftime "%H:%M:" %></td>
+				<td style="font-size: 10px"><%= event["Lunes"] %></td>
+				<td style="font-size: 10px"><%= event["Martes"] %></td>
+				<td style="font-size: 10px"><%= event["Miercoles"] %></td>
+				<td style="font-size: 10px"><%= event["Jueves"] %></td>
+				<td style="font-size: 10px"><%= event["Viernes"] %></td>
+				<td  style="font-size: 10px"><%= event["Sábado"] %></td>
+			  </tr>
+			<% end %>
+			<% end %>
+		  </tbody>
+		</table>
+
+	</div>
+
+	<div class="col-xs-4" >
+
+		<%= render :partial => 'shared/menu3' %>
+
+	</div><!--/.well -->
+
+</div>

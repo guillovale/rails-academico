@@ -1,0 +1,230 @@
+<!-- CSS media query within a stylesheet -->
+<style>
+@media print {
+  @page { margin: 0; }
+  #printPageButton {
+    display: none;
+  }
+  a[href] {
+    display: none;
+  }
+
+	.noprint{
+       display:none;
+   }
+ 
+}
+</style>
+
+<div class="row">
+<div class="col-xs-12">
+<%= image_tag('encabezado.png')  %>
+<div class="noprint">
+<% if flash[:alert] %>
+    <div class="alert alert-info"><%= flash[:alert] %></div>
+  <% end %>
+
+<%#= link_to '<< Regresar', @usuario, :class => "btn btn-warning" %>
+<br>
+<br>
+<%= render partial: 'search' %>
+</div>
+<h3>Notas período <%= @idperiodo.DescPerLec unless !@idperiodo %></h3>
+<p>Alumno: <%= @usuario.ApellInfPer + ' '+ @usuario.ApellMatInfPer  + ' '+ @usuario.NombInfPer %></p>
+<% if !@factura.nil?  %>
+	<% if @factura.observacion.downcase != 'snna' and @factura.idper == 109 %>
+	<%= button_to 'Actualizar notas', { action: "crear_nota", id: @usuario, idper: @idperiodo}, class: "btn btn-success btn-sm" %>
+	<% end %>
+<% end %>
+<% debug @notas_componente %>
+<% if !@results.nil?  %>
+
+<table  class=" table-sm table table-bordered table-condensed ">
+			
+			<thead>
+				<tr>
+					<th> Asignatura</th>
+				  	<th> Gestión A1. </th>
+					<th> Gestión A2.</th>
+					<th> Proyecto A.</th>
+					<th> Examen 1P</th>
+					<th> Examen 2P</th>
+					<th> Promedio</th>
+					<th> Mejoramiento</th>
+					<th> Asistencia</th>
+					<th> Notafinal</th>
+	
+				</tr>
+		  </thead>
+
+		  <tbody>
+
+				<tr>
+					<td style = "font-size: 12px; font-weight: bold; color :blue; ">Detalle de Calificaciones</td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+				</tr>
+			
+						
+			<% if !@results.nil? && @estado_matricula == 1 %>
+				<% @results.each do |book| %>
+				  <tr>
+					<td style = "font-size: 11px; "><%= book['NombAsig'] %></td>
+					<td style = "font-size: 11px; "><%= book['NGA1'] %></td>
+					<td style = "font-size: 11px; "><%= book['NGA2'] %></td>
+					<td style = "font-size: 11px; "><%= book['NPA'] %></td>
+					<td style = "font-size: 11px; "><%= book['NX1'] %></td>
+					<td style = "font-size: 11px; "><%= book['NX2'] %></td>
+					<td style = "font-size: 11px; "><%= book['suma'].to_f.round(0) %></td>
+					<td style = "font-size: 11px; "><%= book['NM'].to_f.round(0) %></td>
+					<td style = "font-size: 11px; "><%= book['NAT'].to_f.round(0) %>0%</td>
+					<td style = "font-size: 11px; "><%= book['notafinal'].to_f.round(0) %></td>
+				  </tr>
+				<% end %>
+				
+
+				
+				
+			<% end %>
+
+			
+			
+		  </tbody>
+		</table>
+		
+
+<% else %>
+
+Fórmula: ( (A*<%=@ca.valor/100 %> + B*<%=@cb.valor/100 %> + C*<%=@cc.valor/100 %>)*<%=@ct.valor/100 %> + X*<%=@ex.valor/100 %>)
+<table  class=" table-sm table table-bordered table-condensed ">
+			
+			<thead>
+				<tr>
+					<th>Asignatura</th>
+					<th>hemi1</th>
+					<th>A1</th>
+					<th>B1</th>
+					<th>C1</th>
+					<th>Exm1</th>
+					<th>Nota1</th>
+					<th>Ast1</th>
+					<th>hemi2</th>
+					<th>A2</th>
+					<th>B2</th>
+					<th>C2</th>
+					<th>Exm2</th>
+					<th>Nota2</th>
+					<th>Ast2</th>
+					<th>Rec</th>
+					<th>Final</th>
+				</tr>
+		  </thead>
+
+		  <tbody>
+
+			<% if !@notas_componente.nil? && @estado_matricula == 1 %>
+				<% @notas_componente.each do |key, nota| %>
+					
+					<tr>
+							<td style = "font-size: 12px;"><%= key %></td>
+							<td style = "font-size: 12px;"><%= nota['hemi1'] %></td>
+							<td style = "font-size: 12px;"> <%= nota['A1'] %> </td>
+							<td style = "font-size: 12px;"><%= nota['B1'] %> </td>
+							<td style = "font-size: 12px;"><%= nota['C1'] %> </td>
+							<td style = "font-size: 12px;"><%= nota['X1'] %> </td>
+							<td style = "font-size: 12px; font-weight: bold;"><%= nota['nota1'] %> </td>							
+							<td style = "font-size: 12px;"><%= nota['T1'] %> </td>
+							<td style = "font-size: 12px;"><%= nota['hemi2'] %></td>
+							<td style = "font-size: 12px;"> <%= nota['A2'] %> </td>
+							<td style = "font-size: 12px;"><%= nota['B2'] %> </td>
+							<td style = "font-size: 12px;"><%= nota['C2'] %> </td>
+							<td style = "font-size: 12px;"><%= nota['X2'] %> </td>
+							<td style = "font-size: 12px; font-weight: bold;"><%= nota['nota2'] %> </td>							
+							<td style = "font-size: 12px;"><%= nota['T2'] %> </td>
+							<td style = "font-size: 12px;"><%= nota['recuperacion'] %> </td>
+							<% if !nota['notaF'].nil? %>
+							<% if nota['notaF'] >= 7 %>
+								<td style = "font-size: 12px; font-weight: bold; color:black"><%= nota['notaF'] %> </td>
+							
+							<% elsif (nota['notaF'] >= 5 &&  nota['notaF'] < 7 ) %>
+								<% if nota['notaF']*2 + nota['recuperacion'] >= 20 %>
+									<td style = "font-size: 12px; font-weight: bold; color:black"><%= nota['notaF'] %> </td>
+								<% else %>
+									<td style = "font-size: 12px; font-weight: bold; color:red"><%= nota['notaF'] %> </td>
+								<% end %>
+							<% else %>
+								<td style = "font-size: 12px; font-weight: bold; color:red"><%= nota['notaF'] %> </td>
+							<% end %>
+							<% end %>
+							
+						</tr>
+				<% end %>
+				<tr>
+					<td>-</td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+				</tr>
+			<% end %>
+		  </tbody>
+		</table>
+
+
+<table  class=" table-sm table table-bordered table-condensed ">
+			
+			<thead>
+				<tr>
+					<th>Matrícula No.</th>
+					<th>Asignatura</th>
+					<th>Hemisemestre</th>
+					<th>Parámetro</th>
+					<th>Componente</th>
+					<th>Nota</th>
+	
+				</tr>
+		  </thead>
+
+		  <tbody>
+
+				<tr>
+					<td style = "font-size: 12px; font-weight: bold; color :blue; ">Detalle de Calificaciones</td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+					<td></td>
+				</tr>
+			
+						
+			<% if !@notasdetalle.nil? && @estado_matricula == 1 %>
+				<% notas = @notasdetalle.sort_by{|e| e[:iddetallematricula]} %>
+				<% @notasdetalle.each do |nota| %>
+					
+					<tr>
+						<td style = "font-size: 11px; "><%= nota.iddetallematricula %></td>
+						<td style = "font-size: 11px; "><%= nota.detallematricula.asignatura.NombAsig %></td>
+						<td style = "font-size: 11px; "><%= nota.libretacalificacion.hemisemestre %></td>
+						<td style = "font-size: 11px; "><%= nota.libretacalificacion.componentecalificacion.componente %></td>
+						<td style = "font-size: 11px; "><%= nota.libretacalificacion.componentecalificacion.parametrocalificacion.sigla %></td>
+						<td style = "font-size: 11px; "><%= nota.nota %></td>
+					</tr>	
+				<% end %>
+
+			<% end %>
+
+			
+			
+		  </tbody>
+		</table>
+<% end %>
+</div>
+</div>

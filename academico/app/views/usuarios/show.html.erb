@@ -1,0 +1,48 @@
+<% provide(:title, @usuario.ApellInfPer) %>
+<% nombre = @usuario.ApellInfPer + ' ' + @usuario.ApellMatInfPer + ' ' + @usuario.NombInfPer %>
+
+<script>
+$('#calendar').fullCalendar({
+	dayClick: function() {
+       // alert('un day has been clicked!');
+	events: '/events.json';
+    }
+
+});
+
+
+</script>
+
+
+<div class="row">
+	
+	<div class="col-xs-2">
+		<%#= render partial: 'shared/menu1' %>
+	</div>
+	
+	<div id="mostrar" class="col-xs-6">
+		<h1>Agenda</h1>
+		
+			<%#= gravatar_for @usuario %>
+			<%#= image_tag url_for(:controller => "usuarios", :action => "show_image", :id => @usuario.CIInfPer) %>
+			<address>
+			  <strong><%= 'C.I. ' + @usuario.CIInfPer%></strong><br>
+			  <strong><%= nombre  %></strong><br>
+			  <%= @usuario.DirecDomicilioPer%><br>
+			  <%= @usuario.CiudadPer%><br>
+			  <abbr title="Phone">P:</abbr> <%= @usuario.Telf1InfPer%><br>
+			</address>
+			<p> <%#= @periodo_matricula %> </p>
+		
+
+		<div class="calendar"></div>
+
+	</div>
+
+	<div class="col-xs-4" >
+
+		<%= render :partial => 'shared/menu3' %>
+
+	</div><!--/.well -->
+
+</div>

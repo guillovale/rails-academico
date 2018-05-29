@@ -1,0 +1,37 @@
+<%= form_for(notasalumnoasignatura) do |f| %>
+  <% if notasalumnoasignatura.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(notasalumnoasignatura.errors.count, "error") %> prohibited this notasalumnoasignatura from being saved:</h2>
+
+      <ul>
+      <% notasalumnoasignatura.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :idnaa %>
+    <%= f.number_field :idnaa %>
+  </div>
+
+  <div class="field">
+    <%= f.label :CIInfPer %>
+    <%= f.text_field :CIInfPer %>
+  </div>
+
+  <div class="field">
+    <%= f.label :idAsig %>
+    <%= f.text_field :idAsig %>
+  </div>
+
+  <div class="field">
+    <%= f.label :idPer %>
+    <%= f.number_field :idPer %>
+  </div>
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

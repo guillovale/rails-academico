@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  idnaa: 1
+  CIInfPer: MyString
+  idAsig: MyString
+  idPer: 1
+
+two:
+  idnaa: 1
+  CIInfPer: MyString
+  idAsig: MyString
+  idPer: 1

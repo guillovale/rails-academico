@@ -1,0 +1,184 @@
+<!-- CSS media query within a stylesheet -->
+<style>
+@media print {
+  @page { margin: 0; }
+  #printPageButton {
+    display: none;
+  }
+  a[href] {
+    display: none;
+  }
+ 
+}
+</style>
+
+<div class="row">
+<div class="col-xs-10">
+	<%= image_tag('encabezado.png')  %>
+	<%#= link_to 'Regresar', url_for(:back), class: "btn btn-info btn-sm" %>
+	<button id="printPageButton", onclick="window.print()">Imprimir</button>
+	
+</br>
+
+<address>
+	<strong>Documento No:</strong>
+		<% if @factura %>
+			<strong><%=  @factura.id %> </strong>
+		<% end %>
+	</br>
+	Fecha emisión:
+	<% if @factura %>
+		<%=  @factura.fecha %>
+		<% obs =  @factura.observacion%>
+	<% end %>
+	</br>
+	Período:
+ 	<%= @factura.periodolectivo.DescPerLec %>
+	</br></br>
+	<% nombre = @usuario.ApellInfPer + ' ' + @usuario.ApellMatInfPer + ' ' + @usuario.NombInfPer %>
+	<%#= image_tag url_for(:controller => "usuarios", :action => "show_image", :id => @usuario.CIInfPer) %>
+	<strong><%= 'C.I. ' + @usuario.CIInfPer%></strong><br>
+	<strong><%= nombre  %></strong>
+</address>
+<h5>Matrícula: <%= obs %></h5>
+<div class="list-group" >
+		
+		<table  class=" table-sm table table-bordered table-condensed ">
+			
+			<thead>
+				<tr>
+					<th>ID-Matrícula</th>
+					<th>IdCurso</th>
+					<th>Nivel</th>
+					<th>Carrera</th>
+					<th>Código</th>
+					<th>Asignatura</th>
+					<th>Paralelo</th>
+					<th>Crédito</th>
+					<th>Costo</th>
+	
+				</tr>
+		  </thead>
+
+		  <tbody>
+
+			<% sumacreditos = 0 %>
+			<% sumapagar = 0 %>
+			<% matriculadas = 0 %>
+						
+			<% if !@detalle_matriculas.nil?%>
+				<%# notas = @detalle_matriculas.sort_by{|e| e[:idMatricula]} %>
+				<% @detalle_matriculas.each do |matricula| %>
+					<% curso = Cursoofertado.where("id = ? and id > 0", matricula.idcurso).first() %>
+					
+					<tr>
+						<td style = "font-size: 11px; "><%= matricula.id %></td>
+						<td style = "font-size: 11px; "><%= matricula.idcurso %></td>
+						<% if !curso.nil? %>
+							<td style = "font-size: 11px; "><%= curso.detallemalla.nivel unless curso.detallemalla.nil? %></td>
+							<td style = "font-size: 11px; "><%= curso.detallemalla.mallacarrera.idcarrera unless 
+																curso.detallemalla.mallacarrera.nil?  %></td>
+							<td style = "font-size: 11px; "><%= curso.detallemalla.idasignatura unless 
+																curso.detallemalla.nil? %></td>
+							<td style = "font-size: 11px; "><%= curso.detallemalla.asignatura.NombAsig unless 
+																curso.detallemalla.asignatura.nil? %></td>
+							<td style = "font-size: 11px; "><%= curso.paralelo %></td>
+							<td style = "font-size: 11px; "><%= curso.detallemalla.credito unless 
+															curso.detallemalla.nil?%></td>
+						<% else %>
+							<td style = "font-size: 11px; "><%= matricula.nivel %></td>
+							<td style = "font-size: 11px; "><%= matricula.idcarr  %></td>
+							<td style = "font-size: 11px; "><%= matricula.idasig %></td>
+							<td style = "font-size: 11px; "><%= matricula.asignatura.NombAsig unless 
+																matricula.asignatura.nil? %></td>
+							<td style = "font-size: 11px; "><%= matricula.paralelo %></td>
+							<td style = "font-size: 11px; "><%= matricula.credito %></td>
+						<% end %>
+						<td style = "font-size: 11px; ">
+							<%= (matricula.costo.to_f*matricula.credito.to_i).round(2) %></td>
+						
+					</tr>
+					<% sumacreditos = sumacreditos + matricula.credito.to_i %>
+					<% sumapagar = sumapagar + matricula.costo.to_f*matricula.credito.to_i %>
+				<% end %>
+				<tr>
+					<th>.</th>
+					<th></th>
+					<th></th>
+					<th></th>
+					<th></th>
+					<th></th>
+					<th></th>
+					<th></th>
+					<th></th>
+		
+				</tr>
+				
+				<tr>
+					<th></th>
+					<th></th>
+					<th></th>
+					<th></th>
+					<th></th>
+					<th></th>
+					<td>Valor créditos:</td>
+					<td><%= sumacreditos %></td>
+					<td><%= "$ #{sumapagar.round(2)}" %></td>
+					<th></th>
+		
+				</tr>
+				<tr>
+					<th></th>
+					<th></th>
+					<th></th>
+					<th></th>
+					<th></th>
+					<th></th>
+					<td>Valor matrícula:</td>
+					<th></th>
+					<td><%= "$ #{@factura.valor_matricula.round(2)}" %></td>
+					<th></th>
+		
+				</tr>
+				<tr>
+					<th></th>
+					<th></th>
+					<th></th>
+					<th></th>
+					<th></th>
+					<th></th>
+					<th>Total matrícula:</th>
+					<th></th>
+					<% totalapagar =  (@factura.valor_matricula.round(2) + sumapagar.round(2)).round(2)%>
+					<th><%= "$ #{totalapagar}" %></th>
+					<th></th>
+		
+				</tr>
+			<% end %>
+
+
+			
+		  </tbody>
+		</table>
+		<font size="1" >
+			<%= @carreras %>
+		</font>
+            </div>
+</div>
+
+
+</div><!--/.well -->
+<footer>
+  <address style="font-size:80%;">
+	F.)----------------------------
+	</br>
+	Solicitante
+	</br></br>
+	Entregar firmado en la Secretaría Técnica Académica de su Facultad por duplicado.
+	</br>
+	Para estudiantes con valor a cancelar: Sírvase realizar el depósito de los valores en:
+	</br>
+	Cuenta BanEcuador No. 0090102815 - Sublínea 30200 de la Universidad Técnica Luis Vargas Torres de Esmeraldas.
+
+  </address>
+</footer>

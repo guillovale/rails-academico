@@ -1,0 +1,67 @@
+<% @usuario ||= current_user %>
+<script>
+
+
+
+/*$(document).ready(function() {
+   $(".active").click(function() {
+     return false;
+   });
+});
+*/
+
+</script>
+
+<!-- jQuery -->
+    
+
+    <!-- Menu Toggle Script -->
+    <script>
+    $("#sidebar-wrapper").click(function(e) {
+        // e.preventDefault();
+        // $("#wrapper").toggleClass("toggled");
+    });
+    </script>
+
+
+
+
+	<!-- Sidebar -->
+	
+	<div class="sidebar1">
+                <div class="logo">
+			<%= image_tag url_for(:controller => "usuarios", :action => "show_image", :id => @usuario.CIInfPer), size: "80" %>
+			<h6><%= @usuario.NombInfPer %></h6>
+
+                </div>
+                <br>
+	
+		<div class="nav flex-column">
+
+        	<ul class="nav flex-column"> 
+			<li class="nav-item"><%= link_to "Agenda", usuario_path(@usuario) , class: "feed_link"%></li>
+			<li class="nav-item"><%= link_to "Editar datos", edit_usuario_path(@usuario) , class: "feed_link"%></li>
+			<% @periodo = Periodolectivo.where("StatusPerLec = ?", 1).first() %>
+			<% periodo_matricula = Control_periodo_matricula.where('cmp_status = ?', 1).first() %>
+			<% hoy = Time.now.strftime("%Y/%m/%d") %>
+			<% @periodo?(idperiodo = @periodo.idper):(idperiodo = 0) %> 
+			<% extension_mat = Extension_matricula.where("idper = ? and cedula = ? 
+					and ? >= fechain and ? <= fechafin", 
+							idperiodo,@usuario, hoy, hoy)%>
+
+			<% if (periodo_matricula && @usuario.valid? && idperiodo > 0) or (extension_mat.exists? && @usuario.valid?) %>
+				<li class="nav-item"><%= link_to "Matrícula", ver_malla_path(@usuario), class: "feed_link"%></li>
+			<% else %>
+				<li list-group-item active><%= label_tag 'Matrícula'%></li>
+			<% end %>
+			<li class="nav-item"><%= link_to "Ver Notas", ver_notas_matricula_path(@usuario), class: "feed_link"%></li>
+			<li class="nav-item"><%= link_to "Histórico Notas", ver_notas_path(@usuario), class: "feed_link"%></li>
+			
+		</ul>
+
+			
+
+		</div>
+	</div>
+
+
