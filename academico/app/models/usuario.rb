@@ -9,9 +9,10 @@ class Usuario < ApplicationRecord
 	#validates :NacionalidadPer, presence: true
 	#validates :CiudadPer, presence: true
 	#validates :DirecDomicilioPer, presence: true
-	#validates :Telf1InfPer, presence: true
+	#validates :current_password, confirmation: true
 	validates :CelularInfPer, presence: true
-	validates :mailPer, presence: true
+	validates :codigo_dactilar, confirmation: true
+	validates :codigo_dactilar_confirmation, presence: true
 	#def initialize(params = {})
   	#	file = params.delete(:fotografia)
 	 # super

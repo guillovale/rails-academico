@@ -1,6 +1,6 @@
 class UsuariosController < ApplicationController
-	before_action :logged_in_user, only: [:edit, :show]
-	before_action :correct_user,   only: [:edit, :show]
+	before_action :logged_in_user, only: [:edit, :show, :update_password]
+	before_action :correct_user,   only: [:edit, :show, :update_password]
 	#before_action :crear_malla,   only: [:show]
 	#before_filter :logged_in_user, only: [:edit, :show, :new]
 	#skip_before_action :verify_authenticity_token
@@ -21,7 +21,7 @@ class UsuariosController < ApplicationController
 	end
 
 	def edit
-		@usuario = Usuario.find(params[:id])
+		#@usuario = Usuario.find(params[:id])
 		#redirect_to(root_url)
 	end
 
@@ -76,7 +76,31 @@ class UsuariosController < ApplicationController
 	end
 
 	def update_password
-		@usuario = Usuario.find(params[:CIInfPer])
+		
+		if !params[:usuario].nil?
+			if @usuario.validate
+			ggg
+			
+			if @usuario.update_attributes(user_params)
+			      #flash[:success] = "Welcome to the Sample App!"
+				flash[:danger] = "It ok."
+				#redirect_to root_path
+				redirect_to @usuario
+			else
+				flash[:warning] = "It not ok."
+			end
+			end
+			# Sign in the user by passing validation in case their password changed
+		#	bypass_sign_in(@user)
+			
+		else
+			
+			render "editpass"
+		end
+	end
+
+	def change_password
+		#@usuario = Usuario.find(params[:CIInfPer])
 		#if params[:usuario][:password].present? && params[:usuarios][:password_confirmation].present?
 			# Sign in the user by passing validation in case their password changed
 		#	bypass_sign_in(@user)
@@ -96,9 +120,9 @@ class UsuariosController < ApplicationController
 	private
 
 	def user_params
-		params.require(:usuario).permit(:LoginUsu, :ClaveUsu, :NombInfPer, 
+		params.require(:usuario).permit(:NombInfPer, 
 				:GeneroPer, :EtniaPer, :FechNacimPer, :CiudadPer, :DirecDomicilioPer,
-				:Telf1InfPer, :CelularInfPer, :mailPer, :password, :password_confirmation)
+				:Telf1InfPer, :CelularInfPer, :mailPer, :codigo_dactilar, :codigo_dactilar_confirmation)
 	end
 
 	# Confirms a logged-in user.

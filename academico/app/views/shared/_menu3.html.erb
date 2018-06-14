@@ -13,15 +13,18 @@
 		</div>
 		
             <div class="list-group">
-				<p>Documentos períodos anteriores:</p> 
+				<p>Documentos períodos anteriores:</p>
 				<% if @facturas_anteriores %>
 					<% @facturas_anteriores.each do |factura| %>
 						<%= link_to ' ' + factura.tipo_documento + ': ' + factura.periodolectivo.DescPerLec, 
 							ver_matricula_path(CIInfPer:@usuario, factura:factura.id), 
 							class: "glyphicon glyphicon-print" , style: 'color:grey'%>
+							-
+							<br>
 					<% end %>
 				<% end %>
-		
+				
+				<%= link_to " SNNA", ver_snna_path(@usuario), class: "glyphicon glyphicon-print" , style: "color:grey;" %> 
 
             </div>
 </br>

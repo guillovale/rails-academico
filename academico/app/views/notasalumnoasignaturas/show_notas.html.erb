@@ -14,7 +14,7 @@
 		<% if flash[:alert] %>
 			<div class="alert alert-info"><%= flash[:alert] %></div>
 	  	<% end %>
-		<%= image_tag('encabezado.png')  %>
+		<%= image_tag('encabezadonota.png')  %>
 		<div class="noprint">
 			<div style="display:inline-block;">
 				
@@ -54,11 +54,7 @@
 								<th>Asistencia</th>
 								<th>Nota</th>
 								<th>Período</th>
-								<% if !@nivelacion.nil? %>
-									<% if @nivelacion[0]['cedula'].nil? %>
-											<th>Estado</th>
-									<% end %>
-								<% end %>
+								<th>Estado</th>
 							</tr>
 					  </thead>
 
@@ -101,17 +97,15 @@
 									<td style = "font-size: 11px; "><%= nota.CalifFinal %></td>
 									<td style = "font-size: 11px; "><%= nota.periodolectivo.DescPerLec unless 
 										 nota.periodolectivo.nil? %></td>
-									<% if !@nivelacion.nil? %>
-										<% if @nivelacion[0]['cedula'].nil? %>
-											<% if (nota.aprobada == true) %>
-												<td style = "font-size: 11px; color: blue"><%= 'Aprobada' %></td>
-											<% elsif (nota.aprobada == false && nota.StatusCalif == 1 && idper)%>
-												<td style = "font-size: 11px; color: orange"><%= 'Pendiente' %></td>
-											<% else %>
-												<td style = "font-size: 11px; color: red"><%= 'Reprobada' %></td>
-											<% end %>
-										<% end %>
+									
+									<% if (nota.aprobada == true) %>
+									<td style = "font-size: 11px; color: blue"><%= 'Aprobada' %></td>
+									<% elsif (nota.aprobada == false && nota.StatusCalif == 1 && idper)%>
+									<td style = "font-size: 11px; color: orange"><%= 'Pendiente' %></td>
+									<% else %>
+									<td style = "font-size: 11px; color: red"><%= 'Reprobada' %></td>
 									<% end %>
+										
 									
 								</tr>
 								<% sumacreditos = sumacreditos %>
@@ -136,27 +130,12 @@
 						
 					  </tbody>
 					</table>
-					<%# if @nivelacion.nil? %>
+					
 						<font size="1" >
 							<%= @carreras %>
 						</font>
-					<%# end %>
-					<% if !@nivelacion.nil? %>
-						<% if !@nivelacion[0]['cedula'].nil? %>
-						
-						<address style = "font-size: 12px; font-weight: bold; color:black">
-							Período:	<%= @nivelacion[0]['periodo'] %> <br>
-							Carrera:	<%= @nivelacion[0]['carrera'] %> <br>
-							Tipo:	<%= @nivelacion[0]['tipo_ingreso'] %> <br>
-							Promedio Total:	<%= @nivelacion[0]['sumaNota'] %> <br>
-							Promedio Asistencia:	<%= @nivelacion[0]['sumaAsistencia'] %>% <br><br>
-							NIVELACIÓN:	<%= @nivelacion[0]['Estado'] %>
-						
-						</address>
-						
-						<% end %>	
-						
-					<% end %>
+				
+					
 	</div>
 </div><!--/.well -->
 

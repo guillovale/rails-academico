@@ -16,7 +16,8 @@ Rails.application.routes.draw do
 	#post '/usuarios/:id',  to: 'usuarios#edit'
 
 	resources :usuarios
-	get '/usuarios/update_password/:CIInfPer', to: 'usuarios#update_password', as:  'reset_password'
+	get '/usuarios/update_password/:id', to: 'usuarios#update_password', as:  'reset_password'
+	post '/usuarios/update_password/:id', to: 'usuarios#update_password', as:  'set_password'
 	#get 'usuarios/show'
 	 #get 'usuarios/update_password/:CIInfPer', to: 'usuarios/update_password', as: 'reset_password'
 	
@@ -34,6 +35,7 @@ Rails.application.routes.draw do
 	# get 'static_pages/help'
 	get '/notasalumnoasignaturas/show/:CIInfPer/:factura', to: 'notasalumnoasignaturas#show', as:  'ver_matricula'
 	get '/notasalumnoasignaturas/show_notas/:CIInfPer', to: 'notasalumnoasignaturas#show_notas', as:  'ver_notas'
+	get '/notasalumnoasignaturas/ver_snna/:CIInfPer', to: 'notasalumnoasignaturas#ver_snna', as:  'ver_snna'
 	get  '/notasalumnoasignaturas/:CIInfPer', to: 'notasalumnoasignaturas#index', as:  'ver_malla'
 	get  '/notasalumnoasignaturas/crear_matricula/:CIInfPer', to: 'notasalumnoasignaturas#crear_matricula', as:  'crear_matricula'
 	

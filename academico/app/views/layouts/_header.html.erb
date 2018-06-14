@@ -22,18 +22,13 @@
 			<% end %>
 		<li class="nav-item"><%= link_to "NOTAS", ver_notas_matricula_path(@usuario), class: "feed_link" , style: 'color:white; font-size: 14px'%></li>
 		<li class="nav-item"><%= link_to "HISTÓRICO NOTAS", ver_notas_path(@usuario), class: "feed_link" , style: 'color:white; font-size: 14px'%></li>
-        <li><% link_to "AYUDA", '#' , style: 'color:white; font-size: 14px' %></li>
 		
-
-	
+        <li><% link_to "AYUDA", '#' , style: 'color:white; font-size: 14px' %></li>
 
       </ul>
-		
-		
-		
-		
 			
 		<%= link_to "Cerrar sesión", logout_path, method: "delete" , style: 'color:yellow'%>
+		<%= link_to image_tag("bloquear.png", alt: "Cambiar password"), url_for(:controller => "usuarios", :action => "update_password", :id => @usuario.CIInfPer) %>
 			
 				<%= image_tag url_for(:controller => "usuarios", :action => "show_image", :id => @usuario.CIInfPer), size: "80" %>
 			
